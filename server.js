@@ -7,19 +7,11 @@ const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
+const { DB_DEPLOY_CONFIG } = require("./dbConfig");
 
 const PORT = process.env.PORT || 3001;
 
-const db = knex({
-    client: "pg",
-    connection: {
-        host: "localhost",
-        user: "postgres",
-        password: "abcd1234",
-        database: "brain",
-        port: "5432",
-    },
-});
+const db = knex(DB_DEPLOY_CONFIG);
 
 const app = express();
 

@@ -1,4 +1,4 @@
-export const DB_LOCAL_CONFIG = {
+const DB_LOCAL_CONFIG = {
     client: "pg",
     connection: {
         host: "localhost",
@@ -9,10 +9,15 @@ export const DB_LOCAL_CONFIG = {
     },
 }
 
-export const DB_DEPLOY_CONFIG = {
+const DB_DEPLOY_CONFIG = {
     client: "pg",
     connection: {
         connectionString: process.env.DATABASE_URL,
         ssl: true
     },
 }
+
+module.exports = {
+    DB_LOCAL_CONFIG,
+    DB_DEPLOY_CONFIG
+};

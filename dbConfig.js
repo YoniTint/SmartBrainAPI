@@ -12,7 +12,7 @@ export const DB_LOCAL_CONFIG = {
 export const DB_DEPLOY_CONFIG = {
     client: "pg",
     connection: {
-        host: process.env.DATABASE_URL,
+        connectionString: process.env.DATABASE_URL,
         ssl: true
     },
 }

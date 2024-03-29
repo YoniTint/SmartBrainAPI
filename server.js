@@ -1,21 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
+const morgan = require("morgan");
 const cors = require("cors");
 const knex = require("knex");
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
-const { DB_DEPLOY_CONFIG } = require("./dbConfig");
+const { DB_DOCKER_CONFIG } = require("./dbConfig");
 
 const PORT = process.env.PORT || 3001;
-
-const db = knex(DB_DEPLOY_CONFIG);
-
 const app = express();
 
+const db = knex(DB_DOCKER_CONFIG);
+
 app.use(bodyParser.json());
+app.use(morgan('combined'))
 app.use(cors());
 
 app.get("/", (req, res) => {

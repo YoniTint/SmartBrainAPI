@@ -38,7 +38,7 @@ app.post("/profile/:id", auth.requireAuth, (req, res) => {
 app.put("/image", auth.requireAuth, (req, res) => {
     image.handleImage(req, res, db);
 });
-app.post("/imageurl", auth.requireAuth, (req, res) => {
+app.post("/imageurl", (req, res) => {
     image.handleApiCall(req, res);
 });
 

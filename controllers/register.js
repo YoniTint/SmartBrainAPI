@@ -1,10 +1,12 @@
-handleRegister = (req, res, db, bcrypt) => {
+const { getAuthTokenId, createSessions} = require('./signin');
+
+const handleRegister = (req, res, db, bcrypt) => {
     const { email, name, password } = req.body;
     if (!email || !name || !password) {
-        return res.status(400).json("incorrect form submission");
+        return Promise.reject("incorrect form submission");
     }
     const hash = bcrypt.hashSync(password);
-    db.transaction((trx) => {
+    return db.transaction((trx) => {
         trx.insert({
             hash: hash,
             email: email,
@@ -21,18 +23,25 @@ handleRegister = (req, res, db, bcrypt) => {
                         name: name,
                         joined: new Date(),
                     })
-                    .then((user) => {
-                        res.json(user[0]);
-                    });
+                    .then(user => user[0]);
             })
             .then(trx.commit)
             .catch(trx.rollback);
     }).catch((err) => {
         console.log(err);
-        res.status(400).json("unable to register")
+        return Promise.reject("unable to register")
     });
 };
 
+const registerAuthentication = (req, res, db, bcrypt) => {
+    return handleRegister(req, res, db, bcrypt)
+        .then(data => {
+            return data.id && data.email ? createSessions(data) : Promise.reject(data)
+        })
+        .then(session => res.json(session))
+        .catch(err => res.status(400).json(err));
+}
+
 module.exports = {
-    handleRegister: handleRegister,
+    registerAuthentication: registerAuthentication
 };

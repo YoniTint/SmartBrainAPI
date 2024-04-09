@@ -38,7 +38,7 @@ const getAuthTokenId = (req, res) => {
 
 const signToken = (email) => {
     const jwtPayload = { email };
-    return jwt.sign(jwtPayload, process.env.JWT_SECRET_KEY, { expiresIn: '2 days' });
+    return jwt.sign(jwtPayload, process.env.JWT_SECRET_KEY, { expiresIn: '30s' });
 }
 
 const setToken = (token, id) => {
@@ -69,5 +69,9 @@ const signinAuthentication = (req, res, db, bcrypt) => {
 
 module.exports = {
     signinAuthentication: signinAuthentication,
-    redisClient: redisClient
+    redisClient: redisClient,
+    signToken: signToken,
+    setToken: setToken,
+    getAuthTokenId: getAuthTokenId,
+    createSessions: createSessions
 }

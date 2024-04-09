@@ -9,12 +9,23 @@ const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 const auth = require('./controllers/authorization');
-const { DB_DOCKER_CONFIG } = require("./dbConfig");
+const {
+    DB_DOCKER_CONFIG,
+    DB_DEPLOY_CONFIG
+} = require("./dbConfig");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-const db = knex(DB_DOCKER_CONFIG);
+let db;
+
+if (process.env.NODE_ENV === 'production') {
+    db = knex(DB_DEPLOY_CONFIG);
+}
+
+else {
+    db = knex(DB_DOCKER_CONFIG);
+}
 
 app.use(bodyParser.json());
 app.use(morgan('combined'))

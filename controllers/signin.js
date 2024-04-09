@@ -36,19 +36,19 @@ const getAuthTokenId = (req, res) => {
     });
 }
 
-const signToken = (email) => {
-    const jwtPayload = { email };
+const signToken = (id) => {
+    const jwtPayload = { id };
     return jwt.sign(jwtPayload, process.env.JWT_SECRET_KEY, { expiresIn: '15m' });
 }
 
 const setToken = (token, id) => {
-    return Promise.resolve(redisClient.set(token, id));
+    return Promise.resolve(redisClient.set(token, id, 'EX', 5 * 6 * 10));
 }
 
 const createSessions = (user) => {
     // JWT token, return user data
-    const { email, id } = user;
-    const token = signToken(email);
+    const { id } = user;
+    const token = signToken(id);
     return setToken(token, id)
         .then(() => {
             return { success: 'true', userId: id, token }
